@@ -29,11 +29,309 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "The Console for LAIN Cluster",
+    "description": "The Console API Server for LAIN Cluster",
     "title": "Console",
     "version": "0.0.1"
   },
   "paths": {
+    "/groups": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "getGroups",
+        "responses": {
+          "200": {
+            "description": "List the groups",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/group"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "createGroup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{group}": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "getGroup",
+        "responses": {
+          "200": {
+            "description": "Get one group",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "updateGroup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "deleteGroup",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps": {
+      "get": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "getApps",
+        "responses": {
+          "200": {
+            "description": "List the apps",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/app"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "createApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps/{app}": {
+      "get": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "getApp",
+        "responses": {
+          "200": {
+            "description": "Get one App",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "updateApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "deleteApp",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "app",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps/{app}/deployment": {
+      "get": {
+        "tags": [
+          "deployment"
+        ],
+        "operationId": "getDeployment",
+        "responses": {
+          "200": {
+            "description": "Get a deployment",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "app",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
     "/ping": {
       "get": {
         "tags": [
@@ -41,8 +339,80 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "check whether it is healthy"
+            "description": "Check whether the server is healthy"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "app": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "deployment": {
+      "type": "object"
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }
@@ -60,11 +430,309 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "The Console for LAIN Cluster",
+    "description": "The Console API Server for LAIN Cluster",
     "title": "Console",
     "version": "0.0.1"
   },
   "paths": {
+    "/groups": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "getGroups",
+        "responses": {
+          "200": {
+            "description": "List the groups",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/group"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "createGroup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{group}": {
+      "get": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "getGroup",
+        "responses": {
+          "200": {
+            "description": "Get one group",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "updateGroup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "groups"
+        ],
+        "operationId": "deleteGroup",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps": {
+      "get": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "getApps",
+        "responses": {
+          "200": {
+            "description": "List the apps",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/app"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "createApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps/{app}": {
+      "get": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "getApp",
+        "responses": {
+          "200": {
+            "description": "Get one App",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "updateApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "apps"
+        ],
+        "operationId": "deleteApp",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "app",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/groups/{group}/apps/{app}/deployment": {
+      "get": {
+        "tags": [
+          "deployment"
+        ],
+        "operationId": "getDeployment",
+        "responses": {
+          "200": {
+            "description": "Get a deployment",
+            "schema": {
+              "$ref": "#/definitions/app"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "group",
+          "in": "path",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "app",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
     "/ping": {
       "get": {
         "tags": [
@@ -72,8 +740,80 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "check whether it is healthy"
+            "description": "Check whether the server is healthy"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "app": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "deployment": {
+      "type": "object"
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

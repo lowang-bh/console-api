@@ -19,6 +19,9 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/laincloud/console-api/restapi/operations/apps"
+	"github.com/laincloud/console-api/restapi/operations/deployment"
+	"github.com/laincloud/console-api/restapi/operations/groups"
 	"github.com/laincloud/console-api/restapi/operations/ping"
 )
 
@@ -42,10 +45,43 @@ func NewConsoleAPI(spec *loads.Document) *ConsoleAPI {
 		PingGetPingHandler: ping.GetPingHandlerFunc(func(params ping.GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation PingGetPing has not yet been implemented")
 		}),
+		AppsCreateAppHandler: apps.CreateAppHandlerFunc(func(params apps.CreateAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation AppsCreateApp has not yet been implemented")
+		}),
+		GroupsCreateGroupHandler: groups.CreateGroupHandlerFunc(func(params groups.CreateGroupParams) middleware.Responder {
+			return middleware.NotImplemented("operation GroupsCreateGroup has not yet been implemented")
+		}),
+		AppsDeleteAppHandler: apps.DeleteAppHandlerFunc(func(params apps.DeleteAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation AppsDeleteApp has not yet been implemented")
+		}),
+		GroupsDeleteGroupHandler: groups.DeleteGroupHandlerFunc(func(params groups.DeleteGroupParams) middleware.Responder {
+			return middleware.NotImplemented("operation GroupsDeleteGroup has not yet been implemented")
+		}),
+		AppsGetAppHandler: apps.GetAppHandlerFunc(func(params apps.GetAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation AppsGetApp has not yet been implemented")
+		}),
+		AppsGetAppsHandler: apps.GetAppsHandlerFunc(func(params apps.GetAppsParams) middleware.Responder {
+			return middleware.NotImplemented("operation AppsGetApps has not yet been implemented")
+		}),
+		DeploymentGetDeploymentHandler: deployment.GetDeploymentHandlerFunc(func(params deployment.GetDeploymentParams) middleware.Responder {
+			return middleware.NotImplemented("operation DeploymentGetDeployment has not yet been implemented")
+		}),
+		GroupsGetGroupHandler: groups.GetGroupHandlerFunc(func(params groups.GetGroupParams) middleware.Responder {
+			return middleware.NotImplemented("operation GroupsGetGroup has not yet been implemented")
+		}),
+		GroupsGetGroupsHandler: groups.GetGroupsHandlerFunc(func(params groups.GetGroupsParams) middleware.Responder {
+			return middleware.NotImplemented("operation GroupsGetGroups has not yet been implemented")
+		}),
+		AppsUpdateAppHandler: apps.UpdateAppHandlerFunc(func(params apps.UpdateAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation AppsUpdateApp has not yet been implemented")
+		}),
+		GroupsUpdateGroupHandler: groups.UpdateGroupHandlerFunc(func(params groups.UpdateGroupParams) middleware.Responder {
+			return middleware.NotImplemented("operation GroupsUpdateGroup has not yet been implemented")
+		}),
 	}
 }
 
-/*ConsoleAPI The Console for LAIN Cluster */
+/*ConsoleAPI The Console API Server for LAIN Cluster */
 type ConsoleAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
@@ -75,6 +111,28 @@ type ConsoleAPI struct {
 
 	// PingGetPingHandler sets the operation handler for the get ping operation
 	PingGetPingHandler ping.GetPingHandler
+	// AppsCreateAppHandler sets the operation handler for the create app operation
+	AppsCreateAppHandler apps.CreateAppHandler
+	// GroupsCreateGroupHandler sets the operation handler for the create group operation
+	GroupsCreateGroupHandler groups.CreateGroupHandler
+	// AppsDeleteAppHandler sets the operation handler for the delete app operation
+	AppsDeleteAppHandler apps.DeleteAppHandler
+	// GroupsDeleteGroupHandler sets the operation handler for the delete group operation
+	GroupsDeleteGroupHandler groups.DeleteGroupHandler
+	// AppsGetAppHandler sets the operation handler for the get app operation
+	AppsGetAppHandler apps.GetAppHandler
+	// AppsGetAppsHandler sets the operation handler for the get apps operation
+	AppsGetAppsHandler apps.GetAppsHandler
+	// DeploymentGetDeploymentHandler sets the operation handler for the get deployment operation
+	DeploymentGetDeploymentHandler deployment.GetDeploymentHandler
+	// GroupsGetGroupHandler sets the operation handler for the get group operation
+	GroupsGetGroupHandler groups.GetGroupHandler
+	// GroupsGetGroupsHandler sets the operation handler for the get groups operation
+	GroupsGetGroupsHandler groups.GetGroupsHandler
+	// AppsUpdateAppHandler sets the operation handler for the update app operation
+	AppsUpdateAppHandler apps.UpdateAppHandler
+	// GroupsUpdateGroupHandler sets the operation handler for the update group operation
+	GroupsUpdateGroupHandler groups.UpdateGroupHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -140,6 +198,50 @@ func (o *ConsoleAPI) Validate() error {
 
 	if o.PingGetPingHandler == nil {
 		unregistered = append(unregistered, "ping.GetPingHandler")
+	}
+
+	if o.AppsCreateAppHandler == nil {
+		unregistered = append(unregistered, "apps.CreateAppHandler")
+	}
+
+	if o.GroupsCreateGroupHandler == nil {
+		unregistered = append(unregistered, "groups.CreateGroupHandler")
+	}
+
+	if o.AppsDeleteAppHandler == nil {
+		unregistered = append(unregistered, "apps.DeleteAppHandler")
+	}
+
+	if o.GroupsDeleteGroupHandler == nil {
+		unregistered = append(unregistered, "groups.DeleteGroupHandler")
+	}
+
+	if o.AppsGetAppHandler == nil {
+		unregistered = append(unregistered, "apps.GetAppHandler")
+	}
+
+	if o.AppsGetAppsHandler == nil {
+		unregistered = append(unregistered, "apps.GetAppsHandler")
+	}
+
+	if o.DeploymentGetDeploymentHandler == nil {
+		unregistered = append(unregistered, "deployment.GetDeploymentHandler")
+	}
+
+	if o.GroupsGetGroupHandler == nil {
+		unregistered = append(unregistered, "groups.GetGroupHandler")
+	}
+
+	if o.GroupsGetGroupsHandler == nil {
+		unregistered = append(unregistered, "groups.GetGroupsHandler")
+	}
+
+	if o.AppsUpdateAppHandler == nil {
+		unregistered = append(unregistered, "apps.UpdateAppHandler")
+	}
+
+	if o.GroupsUpdateGroupHandler == nil {
+		unregistered = append(unregistered, "groups.UpdateGroupHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -244,6 +346,61 @@ func (o *ConsoleAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/ping"] = ping.NewGetPing(o.context, o.PingGetPingHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/groups/{group}/apps"] = apps.NewCreateApp(o.context, o.AppsCreateAppHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/groups"] = groups.NewCreateGroup(o.context, o.GroupsCreateGroupHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/groups/{group}/apps/{app}"] = apps.NewDeleteApp(o.context, o.AppsDeleteAppHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/groups/{group}"] = groups.NewDeleteGroup(o.context, o.GroupsDeleteGroupHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/groups/{group}/apps/{app}"] = apps.NewGetApp(o.context, o.AppsGetAppHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/groups/{group}/apps"] = apps.NewGetApps(o.context, o.AppsGetAppsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/groups/{group}/apps/{app}/deployment"] = deployment.NewGetDeployment(o.context, o.DeploymentGetDeploymentHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/groups/{group}"] = groups.NewGetGroup(o.context, o.GroupsGetGroupHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/groups"] = groups.NewGetGroups(o.context, o.GroupsGetGroupsHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/groups/{group}/apps/{app}"] = apps.NewUpdateApp(o.context, o.AppsUpdateAppHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/groups/{group}"] = groups.NewUpdateGroup(o.context, o.GroupsUpdateGroupHandler)
 
 }
 

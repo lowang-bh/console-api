@@ -14,7 +14,7 @@ import (
 // GetPingOKCode is the HTTP code returned for type GetPingOK
 const GetPingOKCode int = 200
 
-/*GetPingOK check whether it is healthy
+/*GetPingOK Check whether the server is healthy
 
 swagger:response getPingOK
 */

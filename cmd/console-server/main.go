@@ -29,7 +29,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "Console"
-	parser.LongDescription = "The Console for LAIN Cluster"
+	parser.LongDescription = "The Console API Server for LAIN Cluster"
 
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {

@@ -2,7 +2,7 @@
 
 /*
 Package restapi Console
-The Console for LAIN Cluster
+The Console API Server for LAIN Cluster
 
 
     Schemes:
