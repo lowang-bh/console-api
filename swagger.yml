@@ -1,0 +1,24 @@
+swagger: "2.0"
+
+info:
+  description: The Console for LAIN Cluster
+  title: Console
+  version: 0.0.1
+
+schemes:
+  - http
+
+consumes:
+  - application/vnd.laincloud.console.v1+json
+
+produces:
+  - application/vnd.laincloud.console.v1+json
+
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      responses:
+        200:
+          description: check whether it is healthy
