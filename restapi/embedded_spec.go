@@ -19,10 +19,10 @@ var (
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
-    "application/vnd.laincloud.console.v1+json"
+    "application/json"
   ],
   "produces": [
-    "application/vnd.laincloud.console.v1+json"
+    "application/json"
   ],
   "schemes": [
     "http"
@@ -34,7 +34,51 @@ func init() {
     "version": "0.0.1"
   },
   "paths": {
-    "/groups": {
+    "/api/v1/cluster/componentsstatus": {
+      "get": {
+        "tags": [
+          "componentsStatus"
+        ],
+        "operationId": "getClusterComponentsStatus",
+        "responses": {
+          "200": {
+            "description": "Get the cluster components status",
+            "schema": {
+              "$ref": "#/definitions/componentsStatus"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cluster/resourceusage": {
+      "get": {
+        "tags": [
+          "clusterResourceUsage"
+        ],
+        "operationId": "getClusterResource",
+        "responses": {
+          "200": {
+            "description": "Get the cluster resouce usage",
+            "schema": {
+              "$ref": "#/definitions/resourceUsage"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups": {
       "get": {
         "tags": [
           "groups"
@@ -88,7 +132,7 @@ func init() {
         }
       }
     },
-    "/groups/{group}": {
+    "/api/v1/groups/{groupname}": {
       "get": {
         "tags": [
           "groups"
@@ -99,6 +143,12 @@ func init() {
             "description": "Get one group",
             "schema": {
               "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
@@ -151,27 +201,27 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps": {
+    "/api/v1/groups/{groupname}/build/apps": {
       "get": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "getApps",
+        "operationId": "getBuildApps",
         "responses": {
           "200": {
-            "description": "List the apps",
+            "description": "List the build apps",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/app"
+                "$ref": "#/definitions/buildApp"
               }
             }
           },
@@ -185,15 +235,15 @@ func init() {
       },
       "post": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "createApp",
+        "operationId": "createBuildApp",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           }
         ],
@@ -201,7 +251,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           },
           "default": {
@@ -214,40 +264,46 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps/{app}": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}": {
       "get": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "getApp",
+        "operationId": "getBuildApp",
         "responses": {
           "200": {
-            "description": "Get one App",
+            "description": "Get the build App",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
       },
       "put": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "updateApp",
+        "operationId": "updateBuildApp",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           }
         ],
@@ -255,7 +311,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           },
           "default": {
@@ -268,9 +324,9 @@ func init() {
       },
       "delete": {
         "tags": [
-          "apps"
+          "buildApp"
         ],
-        "operationId": "deleteApp",
+        "operationId": "deleteBuildApp",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -285,54 +341,1371 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         },
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "app",
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps/{app}/deployment": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds": {
       "get": {
         "tags": [
-          "deployment"
+          "builds"
         ],
-        "operationId": "getDeployment",
+        "operationId": "getBuilds",
         "responses": {
           "200": {
-            "description": "Get a deployment",
+            "description": "List the builds of the build app",
             "schema": {
-              "$ref": "#/definitions/app"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/build"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         },
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "app",
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/ping": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/log": {
+      "get": {
+        "produces": [
+          "text/plain"
+        ],
+        "tags": [
+          "builds"
+        ],
+        "operationId": "getBuildLog",
+        "responses": {
+          "200": {
+            "description": "Get the build log of the build app"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "buildid",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/publishments": {
+      "get": {
+        "tags": [
+          "builds"
+        ],
+        "operationId": "getBuildPublishments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/publishment"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "buildid",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps": {
+      "get": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "getRuntimeApps",
+        "responses": {
+          "200": {
+            "description": "List the runtime apps",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/runtimeApp"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "createRuntimeApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}": {
+      "get": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "getRuntimeApp",
+        "responses": {
+          "200": {
+            "description": "Get the runtime App",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "updateRuntimeApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "deleteRuntimeApp",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap": {
+      "get": {
+        "tags": [
+          "configMap"
+        ],
+        "operationId": "getConfigMap",
+        "responses": {
+          "200": {
+            "description": "Get the config map of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "configMap"
+        ],
+        "operationId": "createOrUpdateConfigMap",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap/history": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getConfigMapHistory",
+        "responses": {
+          "200": {
+            "description": "Get the config map history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/configMap"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods": {
+      "get": {
+        "tags": [
+          "pods"
+        ],
+        "operationId": "getPods",
+        "responses": {
+          "200": {
+            "description": "Get the pods of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pod"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}": {
+      "get": {
+        "tags": [
+          "pods"
+        ],
+        "operationId": "getPod",
+        "responses": {
+          "200": {
+            "description": "Get the pod of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/pod"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/exec": {
+      "get": {
+        "description": "长连接",
+        "tags": [
+          "pods"
+        ],
+        "operationId": "execPod",
+        "responses": {
+          "200": {
+            "description": "Enter the pod of the runtime app"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/logs": {
+      "get": {
+        "description": "长连接",
+        "tags": [
+          "pods"
+        ],
+        "operationId": "attatchPod",
+        "responses": {
+          "200": {
+            "description": "Attatch the pod of the runtime app"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets": {
+      "get": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "getRuntimeAppSecrets",
+        "responses": {
+          "200": {
+            "description": "Get the secrets of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "createRuntimeAppSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}": {
+      "get": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "getRuntimeAppSecret",
+        "responses": {
+          "200": {
+            "description": "Get the secret of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "updateRuntimeAppSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "deleteRuntimeAppSecret",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}/history": {
+      "get": {
+        "tags": [
+          "runtimeAppSecret"
+        ],
+        "operationId": "getRuntimeAppSecretHistory",
+        "responses": {
+          "200": {
+            "description": "Get the secret history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/service": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "getService",
+        "responses": {
+          "200": {
+            "description": "Get the service of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "createOrUpdateService",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/service/history": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "getServiceHistory",
+        "responses": {
+          "200": {
+            "description": "Get the service history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/workload": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getWorkload",
+        "responses": {
+          "200": {
+            "description": "Get the workload of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "createOrUpdateWorkload",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/workload/history": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getWorkloadHistory",
+        "responses": {
+          "200": {
+            "description": "Get the workload history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/workload"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/ingress": {
+      "get": {
+        "tags": [
+          "ingress"
+        ],
+        "operationId": "getIngress",
+        "responses": {
+          "200": {
+            "description": "Get the ingress",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ingress"
+        ],
+        "operationId": "createOrUpdateIngress",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/pvcs": {
+      "get": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "getPVCs",
+        "responses": {
+          "200": {
+            "description": "List the PVCs",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pvc"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "createPVC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/pvcs/{pvcname}": {
+      "get": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "getPVC",
+        "responses": {
+          "200": {
+            "description": "Get the PVC",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "updatePVC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "deletePVC",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "pvcname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/secrets": {
+      "get": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "getSecrets",
+        "responses": {
+          "200": {
+            "description": "List the secrets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pvc"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "createSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/secrets/{secretname}": {
+      "get": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "getSecret",
+        "responses": {
+          "200": {
+            "description": "Get the secret",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "updateSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "deleteSecret",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/ping": {
       "get": {
         "tags": [
           "ping"
@@ -340,43 +1713,146 @@ func init() {
         "responses": {
           "200": {
             "description": "Check whether the server is healthy"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
           }
         }
       }
     }
   },
   "definitions": {
-    "app": {
+    "build": {
+      "type": "object",
+      "properties": {
+        "endedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "link": {
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "description": "succeeded/failed/cancelled",
+          "type": "string"
+        }
+      }
+    },
+    "buildApp": {
       "type": "object",
       "required": [
         "name"
       ],
       "properties": {
         "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
+          "description": "Unix timstamp (Unit: second)",
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          }
         },
         "name": {
           "type": "string",
           "minLength": 1
         },
-        "owner": {
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceType": {
+          "description": "gitlab",
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceURL": {
           "type": "string",
           "minLength": 1
         },
         "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
-    "deployment": {
-      "type": "object"
+    "componentsStatus": {
+      "type": "object",
+      "properties": {
+        "ceph": {
+          "type": "object"
+        },
+        "etcd": {
+          "type": "object"
+        },
+        "harbor": {
+          "type": "object"
+        },
+        "mysql": {
+          "type": "object"
+        },
+        "redis": {
+          "type": "object"
+        }
+      }
+    },
+    "configMap": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     },
     "error": {
       "type": "object",
@@ -401,18 +1877,243 @@ func init() {
         "name"
       ],
       "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
         "description": {
           "type": "string",
           "minLength": 1
         },
-        "id": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "pod": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "publishment": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "pvc": {
+      "type": "object"
+    },
+    "resourceUsage": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "object"
+        },
+        "disk": {
+          "type": "object"
+        },
+        "memory": {
+          "type": "object"
+        }
+      }
+    },
+    "runtimeApp": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
         },
         "name": {
           "type": "string",
           "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "secret": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "workload": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "description": "deployment/cron_job",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
         }
       }
     }
@@ -420,10 +2121,10 @@ func init() {
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
-    "application/vnd.laincloud.console.v1+json"
+    "application/json"
   ],
   "produces": [
-    "application/vnd.laincloud.console.v1+json"
+    "application/json"
   ],
   "schemes": [
     "http"
@@ -435,7 +2136,51 @@ func init() {
     "version": "0.0.1"
   },
   "paths": {
-    "/groups": {
+    "/api/v1/cluster/componentsstatus": {
+      "get": {
+        "tags": [
+          "componentsStatus"
+        ],
+        "operationId": "getClusterComponentsStatus",
+        "responses": {
+          "200": {
+            "description": "Get the cluster components status",
+            "schema": {
+              "$ref": "#/definitions/componentsStatus"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cluster/resourceusage": {
+      "get": {
+        "tags": [
+          "clusterResourceUsage"
+        ],
+        "operationId": "getClusterResource",
+        "responses": {
+          "200": {
+            "description": "Get the cluster resouce usage",
+            "schema": {
+              "$ref": "#/definitions/resourceUsage"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/groups": {
       "get": {
         "tags": [
           "groups"
@@ -489,7 +2234,7 @@ func init() {
         }
       }
     },
-    "/groups/{group}": {
+    "/api/v1/groups/{groupname}": {
       "get": {
         "tags": [
           "groups"
@@ -500,6 +2245,12 @@ func init() {
             "description": "Get one group",
             "schema": {
               "$ref": "#/definitions/group"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
@@ -552,27 +2303,27 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps": {
+    "/api/v1/groups/{groupname}/build/apps": {
       "get": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "getApps",
+        "operationId": "getBuildApps",
         "responses": {
           "200": {
-            "description": "List the apps",
+            "description": "List the build apps",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/app"
+                "$ref": "#/definitions/buildApp"
               }
             }
           },
@@ -586,15 +2337,15 @@ func init() {
       },
       "post": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "createApp",
+        "operationId": "createBuildApp",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           }
         ],
@@ -602,7 +2353,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           },
           "default": {
@@ -615,40 +2366,46 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps/{app}": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}": {
       "get": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "getApp",
+        "operationId": "getBuildApp",
         "responses": {
           "200": {
-            "description": "Get one App",
+            "description": "Get the build App",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
       },
       "put": {
         "tags": [
-          "apps"
+          "buildApps"
         ],
-        "operationId": "updateApp",
+        "operationId": "updateBuildApp",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           }
         ],
@@ -656,7 +2413,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/app"
+              "$ref": "#/definitions/buildApp"
             }
           },
           "default": {
@@ -669,9 +2426,9 @@ func init() {
       },
       "delete": {
         "tags": [
-          "apps"
+          "buildApp"
         ],
-        "operationId": "deleteApp",
+        "operationId": "deleteBuildApp",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -686,54 +2443,1371 @@ func init() {
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         },
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "app",
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/groups/{group}/apps/{app}/deployment": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds": {
       "get": {
         "tags": [
-          "deployment"
+          "builds"
         ],
-        "operationId": "getDeployment",
+        "operationId": "getBuilds",
         "responses": {
           "200": {
-            "description": "Get a deployment",
+            "description": "List the builds of the build app",
             "schema": {
-              "$ref": "#/definitions/app"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/build"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           }
         }
       },
       "parameters": [
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "group",
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
           "in": "path",
           "required": true
         },
         {
-          "type": "integer",
-          "format": "int64",
-          "name": "app",
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
           "in": "path",
           "required": true
         }
       ]
     },
-    "/ping": {
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/log": {
+      "get": {
+        "produces": [
+          "text/plain"
+        ],
+        "tags": [
+          "builds"
+        ],
+        "operationId": "getBuildLog",
+        "responses": {
+          "200": {
+            "description": "Get the build log of the build app"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "buildid",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/publishments": {
+      "get": {
+        "tags": [
+          "builds"
+        ],
+        "operationId": "getBuildPublishments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/publishment"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "buildid",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps": {
+      "get": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "getRuntimeApps",
+        "responses": {
+          "200": {
+            "description": "List the runtime apps",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/runtimeApp"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "createRuntimeApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}": {
+      "get": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "getRuntimeApp",
+        "responses": {
+          "200": {
+            "description": "Get the runtime App",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "updateRuntimeApp",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/runtimeApp"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "runtimeApps"
+        ],
+        "operationId": "deleteRuntimeApp",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap": {
+      "get": {
+        "tags": [
+          "configMap"
+        ],
+        "operationId": "getConfigMap",
+        "responses": {
+          "200": {
+            "description": "Get the config map of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "configMap"
+        ],
+        "operationId": "createOrUpdateConfigMap",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/configMap"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap/history": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getConfigMapHistory",
+        "responses": {
+          "200": {
+            "description": "Get the config map history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/configMap"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods": {
+      "get": {
+        "tags": [
+          "pods"
+        ],
+        "operationId": "getPods",
+        "responses": {
+          "200": {
+            "description": "Get the pods of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pod"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}": {
+      "get": {
+        "tags": [
+          "pods"
+        ],
+        "operationId": "getPod",
+        "responses": {
+          "200": {
+            "description": "Get the pod of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/pod"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/exec": {
+      "get": {
+        "description": "长连接",
+        "tags": [
+          "pods"
+        ],
+        "operationId": "execPod",
+        "responses": {
+          "200": {
+            "description": "Enter the pod of the runtime app"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/logs": {
+      "get": {
+        "description": "长连接",
+        "tags": [
+          "pods"
+        ],
+        "operationId": "attatchPod",
+        "responses": {
+          "200": {
+            "description": "Attatch the pod of the runtime app"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "podname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets": {
+      "get": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "getRuntimeAppSecrets",
+        "responses": {
+          "200": {
+            "description": "Get the secrets of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "createRuntimeAppSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}": {
+      "get": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "getRuntimeAppSecret",
+        "responses": {
+          "200": {
+            "description": "Get the secret of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "updateRuntimeAppSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "runtimeAppSecrets"
+        ],
+        "operationId": "deleteRuntimeAppSecret",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}/history": {
+      "get": {
+        "tags": [
+          "runtimeAppSecret"
+        ],
+        "operationId": "getRuntimeAppSecretHistory",
+        "responses": {
+          "200": {
+            "description": "Get the secret history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/secret"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/service": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "getService",
+        "responses": {
+          "200": {
+            "description": "Get the service of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "createOrUpdateService",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/service/history": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "operationId": "getServiceHistory",
+        "responses": {
+          "200": {
+            "description": "Get the service history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/service"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/workload": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getWorkload",
+        "responses": {
+          "200": {
+            "description": "Get the workload of the runtime app",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "createOrUpdateWorkload",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/workload"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/apps/{appname}/workload/history": {
+      "get": {
+        "tags": [
+          "workload"
+        ],
+        "operationId": "getWorkloadHistory",
+        "responses": {
+          "200": {
+            "description": "Get the workload history of the runtime app",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/workload"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "appname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/ingress": {
+      "get": {
+        "tags": [
+          "ingress"
+        ],
+        "operationId": "getIngress",
+        "responses": {
+          "200": {
+            "description": "Get the ingress",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ingress"
+        ],
+        "operationId": "createOrUpdateIngress",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ingress"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/pvcs": {
+      "get": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "getPVCs",
+        "responses": {
+          "200": {
+            "description": "List the PVCs",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pvc"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "createPVC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/pvcs/{pvcname}": {
+      "get": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "getPVC",
+        "responses": {
+          "200": {
+            "description": "Get the PVC",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "updatePVC",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pvc"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "pvcs"
+        ],
+        "operationId": "deletePVC",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "pvcname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/secrets": {
+      "get": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "getSecrets",
+        "responses": {
+          "200": {
+            "description": "List the secrets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pvc"
+              }
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "createSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/groups/{groupname}/runtime/secrets/{secretname}": {
+      "get": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "getSecret",
+        "responses": {
+          "200": {
+            "description": "Get the secret",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "updateSecret",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/secret"
+            }
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "secrets"
+        ],
+        "operationId": "deleteSecret",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "groupname",
+          "in": "path",
+          "required": true
+        },
+        {
+          "minLength": 1,
+          "type": "string",
+          "name": "secretname",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/api/v1/ping": {
       "get": {
         "tags": [
           "ping"
@@ -741,43 +3815,146 @@ func init() {
         "responses": {
           "200": {
             "description": "Check whether the server is healthy"
+          },
+          "default": {
+            "description": "Failed",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
           }
         }
       }
     }
   },
   "definitions": {
-    "app": {
+    "build": {
+      "type": "object",
+      "properties": {
+        "endedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "link": {
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "description": "succeeded/failed/cancelled",
+          "type": "string"
+        }
+      }
+    },
+    "buildApp": {
       "type": "object",
       "required": [
         "name"
       ],
       "properties": {
         "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "id": {
+          "description": "Unix timstamp (Unit: second)",
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          }
         },
         "name": {
           "type": "string",
           "minLength": 1
         },
-        "owner": {
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceType": {
+          "description": "gitlab",
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceURL": {
           "type": "string",
           "minLength": 1
         },
         "updatedAt": {
-          "type": "string",
-          "format": "date-time"
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
-    "deployment": {
-      "type": "object"
+    "componentsStatus": {
+      "type": "object",
+      "properties": {
+        "ceph": {
+          "type": "object"
+        },
+        "etcd": {
+          "type": "object"
+        },
+        "harbor": {
+          "type": "object"
+        },
+        "mysql": {
+          "type": "object"
+        },
+        "redis": {
+          "type": "object"
+        }
+      }
+    },
+    "configMap": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     },
     "error": {
       "type": "object",
@@ -802,18 +3979,243 @@ func init() {
         "name"
       ],
       "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
         "description": {
           "type": "string",
           "minLength": 1
         },
-        "id": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "pod": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "publishment": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "pvc": {
+      "type": "object"
+    },
+    "resourceUsage": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "object"
+        },
+        "disk": {
+          "type": "object"
+        },
+        "memory": {
+          "type": "object"
+        }
+      }
+    },
+    "runtimeApp": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
         },
         "name": {
           "type": "string",
           "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "secret": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "workload": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "createdAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdBy": {
+          "description": "创建者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownedBy": {
+          "description": "所有者邮箱",
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "description": "deployment/cron_job",
+          "type": "string"
+        },
+        "updatedAt": {
+          "description": "Unix timstamp (Unit: second)",
+          "type": "integer",
+          "format": "int64"
         }
       }
     }

@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -40,9 +40,10 @@ type UpdateGroupParams struct {
 	Body *models.Group
 	/*
 	  Required: true
+	  Min Length: 1
 	  In: path
 	*/
-	Group int64
+	Groupname string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -71,8 +72,8 @@ func (o *UpdateGroupParams) BindRequest(r *http.Request, route *middleware.Match
 			}
 		}
 	}
-	rGroup, rhkGroup, _ := route.Params.GetOK("group")
-	if err := o.bindGroup(rGroup, rhkGroup, route.Formats); err != nil {
+	rGroupname, rhkGroupname, _ := route.Params.GetOK("groupname")
+	if err := o.bindGroupname(rGroupname, rhkGroupname, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,7 +83,7 @@ func (o *UpdateGroupParams) BindRequest(r *http.Request, route *middleware.Match
 	return nil
 }
 
-func (o *UpdateGroupParams) bindGroup(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *UpdateGroupParams) bindGroupname(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -91,11 +92,20 @@ func (o *UpdateGroupParams) bindGroup(rawData []string, hasKey bool, formats str
 	// Required: true
 	// Parameter is provided by construction from the route
 
-	value, err := swag.ConvertInt64(raw)
-	if err != nil {
-		return errors.InvalidType("group", "path", "int64", raw)
+	o.Groupname = raw
+
+	if err := o.validateGroupname(formats); err != nil {
+		return err
 	}
-	o.Group = value
+
+	return nil
+}
+
+func (o *UpdateGroupParams) validateGroupname(formats strfmt.Registry) error {
+
+	if err := validate.MinLength("groupname", "path", o.Groupname, 1); err != nil {
+		return err
+	}
 
 	return nil
 }

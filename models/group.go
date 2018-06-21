@@ -17,23 +17,37 @@ import (
 // swagger:model group
 type Group struct {
 
+	// Unix timstamp (Unit: second)
+	CreatedAt int64 `json:"createdAt,omitempty"`
+
+	// 创建者邮箱
+	// Min Length: 1
+	CreatedBy string `json:"createdBy,omitempty"`
+
 	// description
 	// Min Length: 1
 	Description string `json:"description,omitempty"`
-
-	// id
-	// Read Only: true
-	ID int64 `json:"id,omitempty"`
 
 	// name
 	// Required: true
 	// Min Length: 1
 	Name *string `json:"name"`
+
+	// 所有者邮箱
+	// Min Length: 1
+	OwnedBy string `json:"ownedBy,omitempty"`
+
+	// Unix timstamp (Unit: second)
+	UpdatedAt int64 `json:"updatedAt,omitempty"`
 }
 
 // Validate validates this group
 func (m *Group) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateCreatedBy(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
@@ -43,9 +57,26 @@ func (m *Group) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateOwnedBy(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Group) validateCreatedBy(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedBy) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("createdBy", "body", string(m.CreatedBy), 1); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -69,6 +100,19 @@ func (m *Group) validateName(formats strfmt.Registry) error {
 	}
 
 	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Group) validateOwnedBy(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.OwnedBy) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("ownedBy", "body", string(m.OwnedBy), 1); err != nil {
 		return err
 	}
 

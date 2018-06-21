@@ -2,11 +2,11 @@
 
 LAIN 3.0 Console API Server.
 
-## 根据 [swagger.yml](swagger.yml) 生成/更新代码
+## 根据 [swagger.json](swagger.json) 生成/更新代码
 
 ```
 go get -u github.com/go-swagger/go-swagger/cmd/swagger  # 安装 go-swagger
-swagger generate server  # 根据 swagger.yml 生成/更新代码
+swagger generate server -f swagger.json # 根据 swagger.yml 生成/更新代码
 ```
 
 ## 编译

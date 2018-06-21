@@ -29,7 +29,7 @@ func NewUpdateGroup(ctx *middleware.Context, handler UpdateGroupHandler) *Update
 	return &UpdateGroup{Context: ctx, Handler: handler}
 }
 
-/*UpdateGroup swagger:route PUT /groups/{group} groups updateGroup
+/*UpdateGroup swagger:route PUT /api/v1/groups/{groupname} groups updateGroup
 
 UpdateGroup update group API
 

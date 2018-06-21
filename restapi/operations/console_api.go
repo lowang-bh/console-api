@@ -19,10 +19,23 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/laincloud/console-api/restapi/operations/apps"
-	"github.com/laincloud/console-api/restapi/operations/deployment"
+	"github.com/laincloud/console-api/restapi/operations/build_app"
+	"github.com/laincloud/console-api/restapi/operations/build_apps"
+	"github.com/laincloud/console-api/restapi/operations/builds"
+	"github.com/laincloud/console-api/restapi/operations/cluster_resource_usage"
+	"github.com/laincloud/console-api/restapi/operations/components_status"
+	"github.com/laincloud/console-api/restapi/operations/config_map"
 	"github.com/laincloud/console-api/restapi/operations/groups"
+	"github.com/laincloud/console-api/restapi/operations/ingress"
 	"github.com/laincloud/console-api/restapi/operations/ping"
+	"github.com/laincloud/console-api/restapi/operations/pods"
+	"github.com/laincloud/console-api/restapi/operations/pvcs"
+	"github.com/laincloud/console-api/restapi/operations/runtime_app_secret"
+	"github.com/laincloud/console-api/restapi/operations/runtime_app_secrets"
+	"github.com/laincloud/console-api/restapi/operations/runtime_apps"
+	"github.com/laincloud/console-api/restapi/operations/secrets"
+	"github.com/laincloud/console-api/restapi/operations/service"
+	"github.com/laincloud/console-api/restapi/operations/workload"
 )
 
 // NewConsoleAPI creates a new Console instance
@@ -42,29 +55,90 @@ func NewConsoleAPI(spec *loads.Document) *ConsoleAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		PingGetPingHandler: ping.GetPingHandlerFunc(func(params ping.GetPingParams) middleware.Responder {
-			return middleware.NotImplemented("operation PingGetPing has not yet been implemented")
+		TxtProducer:         runtime.TextProducer(),
+		PingGetAPIV1PingHandler: ping.GetAPIV1PingHandlerFunc(func(params ping.GetAPIV1PingParams) middleware.Responder {
+			return middleware.NotImplemented("operation PingGetAPIV1Ping has not yet been implemented")
 		}),
-		AppsCreateAppHandler: apps.CreateAppHandlerFunc(func(params apps.CreateAppParams) middleware.Responder {
-			return middleware.NotImplemented("operation AppsCreateApp has not yet been implemented")
+		PodsAttatchPodHandler: pods.AttatchPodHandlerFunc(func(params pods.AttatchPodParams) middleware.Responder {
+			return middleware.NotImplemented("operation PodsAttatchPod has not yet been implemented")
+		}),
+		BuildAppsCreateBuildAppHandler: build_apps.CreateBuildAppHandlerFunc(func(params build_apps.CreateBuildAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildAppsCreateBuildApp has not yet been implemented")
 		}),
 		GroupsCreateGroupHandler: groups.CreateGroupHandlerFunc(func(params groups.CreateGroupParams) middleware.Responder {
 			return middleware.NotImplemented("operation GroupsCreateGroup has not yet been implemented")
 		}),
-		AppsDeleteAppHandler: apps.DeleteAppHandlerFunc(func(params apps.DeleteAppParams) middleware.Responder {
-			return middleware.NotImplemented("operation AppsDeleteApp has not yet been implemented")
+		ConfigMapCreateOrUpdateConfigMapHandler: config_map.CreateOrUpdateConfigMapHandlerFunc(func(params config_map.CreateOrUpdateConfigMapParams) middleware.Responder {
+			return middleware.NotImplemented("operation ConfigMapCreateOrUpdateConfigMap has not yet been implemented")
+		}),
+		IngressCreateOrUpdateIngressHandler: ingress.CreateOrUpdateIngressHandlerFunc(func(params ingress.CreateOrUpdateIngressParams) middleware.Responder {
+			return middleware.NotImplemented("operation IngressCreateOrUpdateIngress has not yet been implemented")
+		}),
+		ServiceCreateOrUpdateServiceHandler: service.CreateOrUpdateServiceHandlerFunc(func(params service.CreateOrUpdateServiceParams) middleware.Responder {
+			return middleware.NotImplemented("operation ServiceCreateOrUpdateService has not yet been implemented")
+		}),
+		WorkloadCreateOrUpdateWorkloadHandler: workload.CreateOrUpdateWorkloadHandlerFunc(func(params workload.CreateOrUpdateWorkloadParams) middleware.Responder {
+			return middleware.NotImplemented("operation WorkloadCreateOrUpdateWorkload has not yet been implemented")
+		}),
+		PvcsCreatePVCHandler: pvcs.CreatePVCHandlerFunc(func(params pvcs.CreatePVCParams) middleware.Responder {
+			return middleware.NotImplemented("operation PvcsCreatePVC has not yet been implemented")
+		}),
+		RuntimeAppsCreateRuntimeAppHandler: runtime_apps.CreateRuntimeAppHandlerFunc(func(params runtime_apps.CreateRuntimeAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppsCreateRuntimeApp has not yet been implemented")
+		}),
+		RuntimeAppSecretsCreateRuntimeAppSecretHandler: runtime_app_secrets.CreateRuntimeAppSecretHandlerFunc(func(params runtime_app_secrets.CreateRuntimeAppSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretsCreateRuntimeAppSecret has not yet been implemented")
+		}),
+		SecretsCreateSecretHandler: secrets.CreateSecretHandlerFunc(func(params secrets.CreateSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation SecretsCreateSecret has not yet been implemented")
+		}),
+		BuildAppDeleteBuildAppHandler: build_app.DeleteBuildAppHandlerFunc(func(params build_app.DeleteBuildAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildAppDeleteBuildApp has not yet been implemented")
 		}),
 		GroupsDeleteGroupHandler: groups.DeleteGroupHandlerFunc(func(params groups.DeleteGroupParams) middleware.Responder {
 			return middleware.NotImplemented("operation GroupsDeleteGroup has not yet been implemented")
 		}),
-		AppsGetAppHandler: apps.GetAppHandlerFunc(func(params apps.GetAppParams) middleware.Responder {
-			return middleware.NotImplemented("operation AppsGetApp has not yet been implemented")
+		PvcsDeletePVCHandler: pvcs.DeletePVCHandlerFunc(func(params pvcs.DeletePVCParams) middleware.Responder {
+			return middleware.NotImplemented("operation PvcsDeletePVC has not yet been implemented")
 		}),
-		AppsGetAppsHandler: apps.GetAppsHandlerFunc(func(params apps.GetAppsParams) middleware.Responder {
-			return middleware.NotImplemented("operation AppsGetApps has not yet been implemented")
+		RuntimeAppsDeleteRuntimeAppHandler: runtime_apps.DeleteRuntimeAppHandlerFunc(func(params runtime_apps.DeleteRuntimeAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppsDeleteRuntimeApp has not yet been implemented")
 		}),
-		DeploymentGetDeploymentHandler: deployment.GetDeploymentHandlerFunc(func(params deployment.GetDeploymentParams) middleware.Responder {
-			return middleware.NotImplemented("operation DeploymentGetDeployment has not yet been implemented")
+		RuntimeAppSecretsDeleteRuntimeAppSecretHandler: runtime_app_secrets.DeleteRuntimeAppSecretHandlerFunc(func(params runtime_app_secrets.DeleteRuntimeAppSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretsDeleteRuntimeAppSecret has not yet been implemented")
+		}),
+		SecretsDeleteSecretHandler: secrets.DeleteSecretHandlerFunc(func(params secrets.DeleteSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation SecretsDeleteSecret has not yet been implemented")
+		}),
+		PodsExecPodHandler: pods.ExecPodHandlerFunc(func(params pods.ExecPodParams) middleware.Responder {
+			return middleware.NotImplemented("operation PodsExecPod has not yet been implemented")
+		}),
+		BuildAppsGetBuildAppHandler: build_apps.GetBuildAppHandlerFunc(func(params build_apps.GetBuildAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildAppsGetBuildApp has not yet been implemented")
+		}),
+		BuildAppsGetBuildAppsHandler: build_apps.GetBuildAppsHandlerFunc(func(params build_apps.GetBuildAppsParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildAppsGetBuildApps has not yet been implemented")
+		}),
+		BuildsGetBuildLogHandler: builds.GetBuildLogHandlerFunc(func(params builds.GetBuildLogParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildsGetBuildLog has not yet been implemented")
+		}),
+		BuildsGetBuildPublishmentsHandler: builds.GetBuildPublishmentsHandlerFunc(func(params builds.GetBuildPublishmentsParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildsGetBuildPublishments has not yet been implemented")
+		}),
+		BuildsGetBuildsHandler: builds.GetBuildsHandlerFunc(func(params builds.GetBuildsParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildsGetBuilds has not yet been implemented")
+		}),
+		ComponentsStatusGetClusterComponentsStatusHandler: components_status.GetClusterComponentsStatusHandlerFunc(func(params components_status.GetClusterComponentsStatusParams) middleware.Responder {
+			return middleware.NotImplemented("operation ComponentsStatusGetClusterComponentsStatus has not yet been implemented")
+		}),
+		ClusterResourceUsageGetClusterResourceHandler: cluster_resource_usage.GetClusterResourceHandlerFunc(func(params cluster_resource_usage.GetClusterResourceParams) middleware.Responder {
+			return middleware.NotImplemented("operation ClusterResourceUsageGetClusterResource has not yet been implemented")
+		}),
+		ConfigMapGetConfigMapHandler: config_map.GetConfigMapHandlerFunc(func(params config_map.GetConfigMapParams) middleware.Responder {
+			return middleware.NotImplemented("operation ConfigMapGetConfigMap has not yet been implemented")
+		}),
+		WorkloadGetConfigMapHistoryHandler: workload.GetConfigMapHistoryHandlerFunc(func(params workload.GetConfigMapHistoryParams) middleware.Responder {
+			return middleware.NotImplemented("operation WorkloadGetConfigMapHistory has not yet been implemented")
 		}),
 		GroupsGetGroupHandler: groups.GetGroupHandlerFunc(func(params groups.GetGroupParams) middleware.Responder {
 			return middleware.NotImplemented("operation GroupsGetGroup has not yet been implemented")
@@ -72,11 +146,71 @@ func NewConsoleAPI(spec *loads.Document) *ConsoleAPI {
 		GroupsGetGroupsHandler: groups.GetGroupsHandlerFunc(func(params groups.GetGroupsParams) middleware.Responder {
 			return middleware.NotImplemented("operation GroupsGetGroups has not yet been implemented")
 		}),
-		AppsUpdateAppHandler: apps.UpdateAppHandlerFunc(func(params apps.UpdateAppParams) middleware.Responder {
-			return middleware.NotImplemented("operation AppsUpdateApp has not yet been implemented")
+		IngressGetIngressHandler: ingress.GetIngressHandlerFunc(func(params ingress.GetIngressParams) middleware.Responder {
+			return middleware.NotImplemented("operation IngressGetIngress has not yet been implemented")
+		}),
+		PvcsGetPVCHandler: pvcs.GetPVCHandlerFunc(func(params pvcs.GetPVCParams) middleware.Responder {
+			return middleware.NotImplemented("operation PvcsGetPVC has not yet been implemented")
+		}),
+		PvcsGetPVCsHandler: pvcs.GetPVCsHandlerFunc(func(params pvcs.GetPVCsParams) middleware.Responder {
+			return middleware.NotImplemented("operation PvcsGetPVCs has not yet been implemented")
+		}),
+		PodsGetPodHandler: pods.GetPodHandlerFunc(func(params pods.GetPodParams) middleware.Responder {
+			return middleware.NotImplemented("operation PodsGetPod has not yet been implemented")
+		}),
+		PodsGetPodsHandler: pods.GetPodsHandlerFunc(func(params pods.GetPodsParams) middleware.Responder {
+			return middleware.NotImplemented("operation PodsGetPods has not yet been implemented")
+		}),
+		RuntimeAppsGetRuntimeAppHandler: runtime_apps.GetRuntimeAppHandlerFunc(func(params runtime_apps.GetRuntimeAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppsGetRuntimeApp has not yet been implemented")
+		}),
+		RuntimeAppSecretsGetRuntimeAppSecretHandler: runtime_app_secrets.GetRuntimeAppSecretHandlerFunc(func(params runtime_app_secrets.GetRuntimeAppSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretsGetRuntimeAppSecret has not yet been implemented")
+		}),
+		RuntimeAppSecretGetRuntimeAppSecretHistoryHandler: runtime_app_secret.GetRuntimeAppSecretHistoryHandlerFunc(func(params runtime_app_secret.GetRuntimeAppSecretHistoryParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretGetRuntimeAppSecretHistory has not yet been implemented")
+		}),
+		RuntimeAppSecretsGetRuntimeAppSecretsHandler: runtime_app_secrets.GetRuntimeAppSecretsHandlerFunc(func(params runtime_app_secrets.GetRuntimeAppSecretsParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretsGetRuntimeAppSecrets has not yet been implemented")
+		}),
+		RuntimeAppsGetRuntimeAppsHandler: runtime_apps.GetRuntimeAppsHandlerFunc(func(params runtime_apps.GetRuntimeAppsParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppsGetRuntimeApps has not yet been implemented")
+		}),
+		SecretsGetSecretHandler: secrets.GetSecretHandlerFunc(func(params secrets.GetSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation SecretsGetSecret has not yet been implemented")
+		}),
+		SecretsGetSecretsHandler: secrets.GetSecretsHandlerFunc(func(params secrets.GetSecretsParams) middleware.Responder {
+			return middleware.NotImplemented("operation SecretsGetSecrets has not yet been implemented")
+		}),
+		ServiceGetServiceHandler: service.GetServiceHandlerFunc(func(params service.GetServiceParams) middleware.Responder {
+			return middleware.NotImplemented("operation ServiceGetService has not yet been implemented")
+		}),
+		ServiceGetServiceHistoryHandler: service.GetServiceHistoryHandlerFunc(func(params service.GetServiceHistoryParams) middleware.Responder {
+			return middleware.NotImplemented("operation ServiceGetServiceHistory has not yet been implemented")
+		}),
+		WorkloadGetWorkloadHandler: workload.GetWorkloadHandlerFunc(func(params workload.GetWorkloadParams) middleware.Responder {
+			return middleware.NotImplemented("operation WorkloadGetWorkload has not yet been implemented")
+		}),
+		WorkloadGetWorkloadHistoryHandler: workload.GetWorkloadHistoryHandlerFunc(func(params workload.GetWorkloadHistoryParams) middleware.Responder {
+			return middleware.NotImplemented("operation WorkloadGetWorkloadHistory has not yet been implemented")
+		}),
+		BuildAppsUpdateBuildAppHandler: build_apps.UpdateBuildAppHandlerFunc(func(params build_apps.UpdateBuildAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation BuildAppsUpdateBuildApp has not yet been implemented")
 		}),
 		GroupsUpdateGroupHandler: groups.UpdateGroupHandlerFunc(func(params groups.UpdateGroupParams) middleware.Responder {
 			return middleware.NotImplemented("operation GroupsUpdateGroup has not yet been implemented")
+		}),
+		PvcsUpdatePVCHandler: pvcs.UpdatePVCHandlerFunc(func(params pvcs.UpdatePVCParams) middleware.Responder {
+			return middleware.NotImplemented("operation PvcsUpdatePVC has not yet been implemented")
+		}),
+		RuntimeAppsUpdateRuntimeAppHandler: runtime_apps.UpdateRuntimeAppHandlerFunc(func(params runtime_apps.UpdateRuntimeAppParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppsUpdateRuntimeApp has not yet been implemented")
+		}),
+		RuntimeAppSecretsUpdateRuntimeAppSecretHandler: runtime_app_secrets.UpdateRuntimeAppSecretHandlerFunc(func(params runtime_app_secrets.UpdateRuntimeAppSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation RuntimeAppSecretsUpdateRuntimeAppSecret has not yet been implemented")
+		}),
+		SecretsUpdateSecretHandler: secrets.UpdateSecretHandlerFunc(func(params secrets.UpdateSecretParams) middleware.Responder {
+			return middleware.NotImplemented("operation SecretsUpdateSecret has not yet been implemented")
 		}),
 	}
 }
@@ -103,36 +237,118 @@ type ConsoleAPI struct {
 	// It has a default implemention in the security package, however you can replace it for your particular usage.
 	BearerAuthenticator func(string, security.ScopedTokenAuthentication) runtime.Authenticator
 
-	// JSONConsumer registers a consumer for a "application/vnd.laincloud.console.v1+json" mime type
+	// JSONConsumer registers a consumer for a "application/json" mime type
 	JSONConsumer runtime.Consumer
 
-	// JSONProducer registers a producer for a "application/vnd.laincloud.console.v1+json" mime type
+	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
+	// TxtProducer registers a producer for a "text/plain" mime type
+	TxtProducer runtime.Producer
 
-	// PingGetPingHandler sets the operation handler for the get ping operation
-	PingGetPingHandler ping.GetPingHandler
-	// AppsCreateAppHandler sets the operation handler for the create app operation
-	AppsCreateAppHandler apps.CreateAppHandler
+	// PingGetAPIV1PingHandler sets the operation handler for the get API v1 ping operation
+	PingGetAPIV1PingHandler ping.GetAPIV1PingHandler
+	// PodsAttatchPodHandler sets the operation handler for the attatch pod operation
+	PodsAttatchPodHandler pods.AttatchPodHandler
+	// BuildAppsCreateBuildAppHandler sets the operation handler for the create build app operation
+	BuildAppsCreateBuildAppHandler build_apps.CreateBuildAppHandler
 	// GroupsCreateGroupHandler sets the operation handler for the create group operation
 	GroupsCreateGroupHandler groups.CreateGroupHandler
-	// AppsDeleteAppHandler sets the operation handler for the delete app operation
-	AppsDeleteAppHandler apps.DeleteAppHandler
+	// ConfigMapCreateOrUpdateConfigMapHandler sets the operation handler for the create or update config map operation
+	ConfigMapCreateOrUpdateConfigMapHandler config_map.CreateOrUpdateConfigMapHandler
+	// IngressCreateOrUpdateIngressHandler sets the operation handler for the create or update ingress operation
+	IngressCreateOrUpdateIngressHandler ingress.CreateOrUpdateIngressHandler
+	// ServiceCreateOrUpdateServiceHandler sets the operation handler for the create or update service operation
+	ServiceCreateOrUpdateServiceHandler service.CreateOrUpdateServiceHandler
+	// WorkloadCreateOrUpdateWorkloadHandler sets the operation handler for the create or update workload operation
+	WorkloadCreateOrUpdateWorkloadHandler workload.CreateOrUpdateWorkloadHandler
+	// PvcsCreatePVCHandler sets the operation handler for the create p v c operation
+	PvcsCreatePVCHandler pvcs.CreatePVCHandler
+	// RuntimeAppsCreateRuntimeAppHandler sets the operation handler for the create runtime app operation
+	RuntimeAppsCreateRuntimeAppHandler runtime_apps.CreateRuntimeAppHandler
+	// RuntimeAppSecretsCreateRuntimeAppSecretHandler sets the operation handler for the create runtime app secret operation
+	RuntimeAppSecretsCreateRuntimeAppSecretHandler runtime_app_secrets.CreateRuntimeAppSecretHandler
+	// SecretsCreateSecretHandler sets the operation handler for the create secret operation
+	SecretsCreateSecretHandler secrets.CreateSecretHandler
+	// BuildAppDeleteBuildAppHandler sets the operation handler for the delete build app operation
+	BuildAppDeleteBuildAppHandler build_app.DeleteBuildAppHandler
 	// GroupsDeleteGroupHandler sets the operation handler for the delete group operation
 	GroupsDeleteGroupHandler groups.DeleteGroupHandler
-	// AppsGetAppHandler sets the operation handler for the get app operation
-	AppsGetAppHandler apps.GetAppHandler
-	// AppsGetAppsHandler sets the operation handler for the get apps operation
-	AppsGetAppsHandler apps.GetAppsHandler
-	// DeploymentGetDeploymentHandler sets the operation handler for the get deployment operation
-	DeploymentGetDeploymentHandler deployment.GetDeploymentHandler
+	// PvcsDeletePVCHandler sets the operation handler for the delete p v c operation
+	PvcsDeletePVCHandler pvcs.DeletePVCHandler
+	// RuntimeAppsDeleteRuntimeAppHandler sets the operation handler for the delete runtime app operation
+	RuntimeAppsDeleteRuntimeAppHandler runtime_apps.DeleteRuntimeAppHandler
+	// RuntimeAppSecretsDeleteRuntimeAppSecretHandler sets the operation handler for the delete runtime app secret operation
+	RuntimeAppSecretsDeleteRuntimeAppSecretHandler runtime_app_secrets.DeleteRuntimeAppSecretHandler
+	// SecretsDeleteSecretHandler sets the operation handler for the delete secret operation
+	SecretsDeleteSecretHandler secrets.DeleteSecretHandler
+	// PodsExecPodHandler sets the operation handler for the exec pod operation
+	PodsExecPodHandler pods.ExecPodHandler
+	// BuildAppsGetBuildAppHandler sets the operation handler for the get build app operation
+	BuildAppsGetBuildAppHandler build_apps.GetBuildAppHandler
+	// BuildAppsGetBuildAppsHandler sets the operation handler for the get build apps operation
+	BuildAppsGetBuildAppsHandler build_apps.GetBuildAppsHandler
+	// BuildsGetBuildLogHandler sets the operation handler for the get build log operation
+	BuildsGetBuildLogHandler builds.GetBuildLogHandler
+	// BuildsGetBuildPublishmentsHandler sets the operation handler for the get build publishments operation
+	BuildsGetBuildPublishmentsHandler builds.GetBuildPublishmentsHandler
+	// BuildsGetBuildsHandler sets the operation handler for the get builds operation
+	BuildsGetBuildsHandler builds.GetBuildsHandler
+	// ComponentsStatusGetClusterComponentsStatusHandler sets the operation handler for the get cluster components status operation
+	ComponentsStatusGetClusterComponentsStatusHandler components_status.GetClusterComponentsStatusHandler
+	// ClusterResourceUsageGetClusterResourceHandler sets the operation handler for the get cluster resource operation
+	ClusterResourceUsageGetClusterResourceHandler cluster_resource_usage.GetClusterResourceHandler
+	// ConfigMapGetConfigMapHandler sets the operation handler for the get config map operation
+	ConfigMapGetConfigMapHandler config_map.GetConfigMapHandler
+	// WorkloadGetConfigMapHistoryHandler sets the operation handler for the get config map history operation
+	WorkloadGetConfigMapHistoryHandler workload.GetConfigMapHistoryHandler
 	// GroupsGetGroupHandler sets the operation handler for the get group operation
 	GroupsGetGroupHandler groups.GetGroupHandler
 	// GroupsGetGroupsHandler sets the operation handler for the get groups operation
 	GroupsGetGroupsHandler groups.GetGroupsHandler
-	// AppsUpdateAppHandler sets the operation handler for the update app operation
-	AppsUpdateAppHandler apps.UpdateAppHandler
+	// IngressGetIngressHandler sets the operation handler for the get ingress operation
+	IngressGetIngressHandler ingress.GetIngressHandler
+	// PvcsGetPVCHandler sets the operation handler for the get p v c operation
+	PvcsGetPVCHandler pvcs.GetPVCHandler
+	// PvcsGetPVCsHandler sets the operation handler for the get p v cs operation
+	PvcsGetPVCsHandler pvcs.GetPVCsHandler
+	// PodsGetPodHandler sets the operation handler for the get pod operation
+	PodsGetPodHandler pods.GetPodHandler
+	// PodsGetPodsHandler sets the operation handler for the get pods operation
+	PodsGetPodsHandler pods.GetPodsHandler
+	// RuntimeAppsGetRuntimeAppHandler sets the operation handler for the get runtime app operation
+	RuntimeAppsGetRuntimeAppHandler runtime_apps.GetRuntimeAppHandler
+	// RuntimeAppSecretsGetRuntimeAppSecretHandler sets the operation handler for the get runtime app secret operation
+	RuntimeAppSecretsGetRuntimeAppSecretHandler runtime_app_secrets.GetRuntimeAppSecretHandler
+	// RuntimeAppSecretGetRuntimeAppSecretHistoryHandler sets the operation handler for the get runtime app secret history operation
+	RuntimeAppSecretGetRuntimeAppSecretHistoryHandler runtime_app_secret.GetRuntimeAppSecretHistoryHandler
+	// RuntimeAppSecretsGetRuntimeAppSecretsHandler sets the operation handler for the get runtime app secrets operation
+	RuntimeAppSecretsGetRuntimeAppSecretsHandler runtime_app_secrets.GetRuntimeAppSecretsHandler
+	// RuntimeAppsGetRuntimeAppsHandler sets the operation handler for the get runtime apps operation
+	RuntimeAppsGetRuntimeAppsHandler runtime_apps.GetRuntimeAppsHandler
+	// SecretsGetSecretHandler sets the operation handler for the get secret operation
+	SecretsGetSecretHandler secrets.GetSecretHandler
+	// SecretsGetSecretsHandler sets the operation handler for the get secrets operation
+	SecretsGetSecretsHandler secrets.GetSecretsHandler
+	// ServiceGetServiceHandler sets the operation handler for the get service operation
+	ServiceGetServiceHandler service.GetServiceHandler
+	// ServiceGetServiceHistoryHandler sets the operation handler for the get service history operation
+	ServiceGetServiceHistoryHandler service.GetServiceHistoryHandler
+	// WorkloadGetWorkloadHandler sets the operation handler for the get workload operation
+	WorkloadGetWorkloadHandler workload.GetWorkloadHandler
+	// WorkloadGetWorkloadHistoryHandler sets the operation handler for the get workload history operation
+	WorkloadGetWorkloadHistoryHandler workload.GetWorkloadHistoryHandler
+	// BuildAppsUpdateBuildAppHandler sets the operation handler for the update build app operation
+	BuildAppsUpdateBuildAppHandler build_apps.UpdateBuildAppHandler
 	// GroupsUpdateGroupHandler sets the operation handler for the update group operation
 	GroupsUpdateGroupHandler groups.UpdateGroupHandler
+	// PvcsUpdatePVCHandler sets the operation handler for the update p v c operation
+	PvcsUpdatePVCHandler pvcs.UpdatePVCHandler
+	// RuntimeAppsUpdateRuntimeAppHandler sets the operation handler for the update runtime app operation
+	RuntimeAppsUpdateRuntimeAppHandler runtime_apps.UpdateRuntimeAppHandler
+	// RuntimeAppSecretsUpdateRuntimeAppSecretHandler sets the operation handler for the update runtime app secret operation
+	RuntimeAppSecretsUpdateRuntimeAppSecretHandler runtime_app_secrets.UpdateRuntimeAppSecretHandler
+	// SecretsUpdateSecretHandler sets the operation handler for the update secret operation
+	SecretsUpdateSecretHandler secrets.UpdateSecretHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -196,36 +412,120 @@ func (o *ConsoleAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.PingGetPingHandler == nil {
-		unregistered = append(unregistered, "ping.GetPingHandler")
+	if o.TxtProducer == nil {
+		unregistered = append(unregistered, "TxtProducer")
 	}
 
-	if o.AppsCreateAppHandler == nil {
-		unregistered = append(unregistered, "apps.CreateAppHandler")
+	if o.PingGetAPIV1PingHandler == nil {
+		unregistered = append(unregistered, "ping.GetAPIV1PingHandler")
+	}
+
+	if o.PodsAttatchPodHandler == nil {
+		unregistered = append(unregistered, "pods.AttatchPodHandler")
+	}
+
+	if o.BuildAppsCreateBuildAppHandler == nil {
+		unregistered = append(unregistered, "build_apps.CreateBuildAppHandler")
 	}
 
 	if o.GroupsCreateGroupHandler == nil {
 		unregistered = append(unregistered, "groups.CreateGroupHandler")
 	}
 
-	if o.AppsDeleteAppHandler == nil {
-		unregistered = append(unregistered, "apps.DeleteAppHandler")
+	if o.ConfigMapCreateOrUpdateConfigMapHandler == nil {
+		unregistered = append(unregistered, "config_map.CreateOrUpdateConfigMapHandler")
+	}
+
+	if o.IngressCreateOrUpdateIngressHandler == nil {
+		unregistered = append(unregistered, "ingress.CreateOrUpdateIngressHandler")
+	}
+
+	if o.ServiceCreateOrUpdateServiceHandler == nil {
+		unregistered = append(unregistered, "service.CreateOrUpdateServiceHandler")
+	}
+
+	if o.WorkloadCreateOrUpdateWorkloadHandler == nil {
+		unregistered = append(unregistered, "workload.CreateOrUpdateWorkloadHandler")
+	}
+
+	if o.PvcsCreatePVCHandler == nil {
+		unregistered = append(unregistered, "pvcs.CreatePVCHandler")
+	}
+
+	if o.RuntimeAppsCreateRuntimeAppHandler == nil {
+		unregistered = append(unregistered, "runtime_apps.CreateRuntimeAppHandler")
+	}
+
+	if o.RuntimeAppSecretsCreateRuntimeAppSecretHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secrets.CreateRuntimeAppSecretHandler")
+	}
+
+	if o.SecretsCreateSecretHandler == nil {
+		unregistered = append(unregistered, "secrets.CreateSecretHandler")
+	}
+
+	if o.BuildAppDeleteBuildAppHandler == nil {
+		unregistered = append(unregistered, "build_app.DeleteBuildAppHandler")
 	}
 
 	if o.GroupsDeleteGroupHandler == nil {
 		unregistered = append(unregistered, "groups.DeleteGroupHandler")
 	}
 
-	if o.AppsGetAppHandler == nil {
-		unregistered = append(unregistered, "apps.GetAppHandler")
+	if o.PvcsDeletePVCHandler == nil {
+		unregistered = append(unregistered, "pvcs.DeletePVCHandler")
 	}
 
-	if o.AppsGetAppsHandler == nil {
-		unregistered = append(unregistered, "apps.GetAppsHandler")
+	if o.RuntimeAppsDeleteRuntimeAppHandler == nil {
+		unregistered = append(unregistered, "runtime_apps.DeleteRuntimeAppHandler")
 	}
 
-	if o.DeploymentGetDeploymentHandler == nil {
-		unregistered = append(unregistered, "deployment.GetDeploymentHandler")
+	if o.RuntimeAppSecretsDeleteRuntimeAppSecretHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secrets.DeleteRuntimeAppSecretHandler")
+	}
+
+	if o.SecretsDeleteSecretHandler == nil {
+		unregistered = append(unregistered, "secrets.DeleteSecretHandler")
+	}
+
+	if o.PodsExecPodHandler == nil {
+		unregistered = append(unregistered, "pods.ExecPodHandler")
+	}
+
+	if o.BuildAppsGetBuildAppHandler == nil {
+		unregistered = append(unregistered, "build_apps.GetBuildAppHandler")
+	}
+
+	if o.BuildAppsGetBuildAppsHandler == nil {
+		unregistered = append(unregistered, "build_apps.GetBuildAppsHandler")
+	}
+
+	if o.BuildsGetBuildLogHandler == nil {
+		unregistered = append(unregistered, "builds.GetBuildLogHandler")
+	}
+
+	if o.BuildsGetBuildPublishmentsHandler == nil {
+		unregistered = append(unregistered, "builds.GetBuildPublishmentsHandler")
+	}
+
+	if o.BuildsGetBuildsHandler == nil {
+		unregistered = append(unregistered, "builds.GetBuildsHandler")
+	}
+
+	if o.ComponentsStatusGetClusterComponentsStatusHandler == nil {
+		unregistered = append(unregistered, "components_status.GetClusterComponentsStatusHandler")
+	}
+
+	if o.ClusterResourceUsageGetClusterResourceHandler == nil {
+		unregistered = append(unregistered, "cluster_resource_usage.GetClusterResourceHandler")
+	}
+
+	if o.ConfigMapGetConfigMapHandler == nil {
+		unregistered = append(unregistered, "config_map.GetConfigMapHandler")
+	}
+
+	if o.WorkloadGetConfigMapHistoryHandler == nil {
+		unregistered = append(unregistered, "workload.GetConfigMapHistoryHandler")
 	}
 
 	if o.GroupsGetGroupHandler == nil {
@@ -236,12 +536,92 @@ func (o *ConsoleAPI) Validate() error {
 		unregistered = append(unregistered, "groups.GetGroupsHandler")
 	}
 
-	if o.AppsUpdateAppHandler == nil {
-		unregistered = append(unregistered, "apps.UpdateAppHandler")
+	if o.IngressGetIngressHandler == nil {
+		unregistered = append(unregistered, "ingress.GetIngressHandler")
+	}
+
+	if o.PvcsGetPVCHandler == nil {
+		unregistered = append(unregistered, "pvcs.GetPVCHandler")
+	}
+
+	if o.PvcsGetPVCsHandler == nil {
+		unregistered = append(unregistered, "pvcs.GetPVCsHandler")
+	}
+
+	if o.PodsGetPodHandler == nil {
+		unregistered = append(unregistered, "pods.GetPodHandler")
+	}
+
+	if o.PodsGetPodsHandler == nil {
+		unregistered = append(unregistered, "pods.GetPodsHandler")
+	}
+
+	if o.RuntimeAppsGetRuntimeAppHandler == nil {
+		unregistered = append(unregistered, "runtime_apps.GetRuntimeAppHandler")
+	}
+
+	if o.RuntimeAppSecretsGetRuntimeAppSecretHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secrets.GetRuntimeAppSecretHandler")
+	}
+
+	if o.RuntimeAppSecretGetRuntimeAppSecretHistoryHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secret.GetRuntimeAppSecretHistoryHandler")
+	}
+
+	if o.RuntimeAppSecretsGetRuntimeAppSecretsHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secrets.GetRuntimeAppSecretsHandler")
+	}
+
+	if o.RuntimeAppsGetRuntimeAppsHandler == nil {
+		unregistered = append(unregistered, "runtime_apps.GetRuntimeAppsHandler")
+	}
+
+	if o.SecretsGetSecretHandler == nil {
+		unregistered = append(unregistered, "secrets.GetSecretHandler")
+	}
+
+	if o.SecretsGetSecretsHandler == nil {
+		unregistered = append(unregistered, "secrets.GetSecretsHandler")
+	}
+
+	if o.ServiceGetServiceHandler == nil {
+		unregistered = append(unregistered, "service.GetServiceHandler")
+	}
+
+	if o.ServiceGetServiceHistoryHandler == nil {
+		unregistered = append(unregistered, "service.GetServiceHistoryHandler")
+	}
+
+	if o.WorkloadGetWorkloadHandler == nil {
+		unregistered = append(unregistered, "workload.GetWorkloadHandler")
+	}
+
+	if o.WorkloadGetWorkloadHistoryHandler == nil {
+		unregistered = append(unregistered, "workload.GetWorkloadHistoryHandler")
+	}
+
+	if o.BuildAppsUpdateBuildAppHandler == nil {
+		unregistered = append(unregistered, "build_apps.UpdateBuildAppHandler")
 	}
 
 	if o.GroupsUpdateGroupHandler == nil {
 		unregistered = append(unregistered, "groups.UpdateGroupHandler")
+	}
+
+	if o.PvcsUpdatePVCHandler == nil {
+		unregistered = append(unregistered, "pvcs.UpdatePVCHandler")
+	}
+
+	if o.RuntimeAppsUpdateRuntimeAppHandler == nil {
+		unregistered = append(unregistered, "runtime_apps.UpdateRuntimeAppHandler")
+	}
+
+	if o.RuntimeAppSecretsUpdateRuntimeAppSecretHandler == nil {
+		unregistered = append(unregistered, "runtime_app_secrets.UpdateRuntimeAppSecretHandler")
+	}
+
+	if o.SecretsUpdateSecretHandler == nil {
+		unregistered = append(unregistered, "secrets.UpdateSecretHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -277,8 +657,8 @@ func (o *ConsoleAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consum
 	for _, mt := range mediaTypes {
 		switch mt {
 
-		case "application/vnd.laincloud.console.v1+json":
-			result["application/vnd.laincloud.console.v1+json"] = o.JSONConsumer
+		case "application/json":
+			result["application/json"] = o.JSONConsumer
 
 		}
 
@@ -297,8 +677,11 @@ func (o *ConsoleAPI) ProducersFor(mediaTypes []string) map[string]runtime.Produc
 	for _, mt := range mediaTypes {
 		switch mt {
 
-		case "application/vnd.laincloud.console.v1+json":
-			result["application/vnd.laincloud.console.v1+json"] = o.JSONProducer
+		case "application/json":
+			result["application/json"] = o.JSONProducer
+
+		case "text/plain":
+			result["text/plain"] = o.TxtProducer
 
 		}
 
@@ -345,62 +728,262 @@ func (o *ConsoleAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/ping"] = ping.NewGetPing(o.context, o.PingGetPingHandler)
+	o.handlers["GET"]["/api/v1/ping"] = ping.NewGetAPIV1Ping(o.context, o.PingGetAPIV1PingHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/logs"] = pods.NewAttatchPod(o.context, o.PodsAttatchPodHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/groups/{group}/apps"] = apps.NewCreateApp(o.context, o.AppsCreateAppHandler)
+	o.handlers["POST"]["/api/v1/groups/{groupname}/build/apps"] = build_apps.NewCreateBuildApp(o.context, o.BuildAppsCreateBuildAppHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/groups"] = groups.NewCreateGroup(o.context, o.GroupsCreateGroupHandler)
-
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/groups/{group}/apps/{app}"] = apps.NewDeleteApp(o.context, o.AppsDeleteAppHandler)
-
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/groups/{group}"] = groups.NewDeleteGroup(o.context, o.GroupsDeleteGroupHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/groups/{group}/apps/{app}"] = apps.NewGetApp(o.context, o.AppsGetAppHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/groups/{group}/apps"] = apps.NewGetApps(o.context, o.AppsGetAppsHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/groups/{group}/apps/{app}/deployment"] = deployment.NewGetDeployment(o.context, o.DeploymentGetDeploymentHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/groups/{group}"] = groups.NewGetGroup(o.context, o.GroupsGetGroupHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/groups"] = groups.NewGetGroups(o.context, o.GroupsGetGroupsHandler)
+	o.handlers["POST"]["/api/v1/groups"] = groups.NewCreateGroup(o.context, o.GroupsCreateGroupHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/groups/{group}/apps/{app}"] = apps.NewUpdateApp(o.context, o.AppsUpdateAppHandler)
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap"] = config_map.NewCreateOrUpdateConfigMap(o.context, o.ConfigMapCreateOrUpdateConfigMapHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/groups/{group}"] = groups.NewUpdateGroup(o.context, o.GroupsUpdateGroupHandler)
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/ingress"] = ingress.NewCreateOrUpdateIngress(o.context, o.IngressCreateOrUpdateIngressHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/service"] = service.NewCreateOrUpdateService(o.context, o.ServiceCreateOrUpdateServiceHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/workload"] = workload.NewCreateOrUpdateWorkload(o.context, o.WorkloadCreateOrUpdateWorkloadHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/api/v1/groups/{groupname}/runtime/pvcs"] = pvcs.NewCreatePVC(o.context, o.PvcsCreatePVCHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/api/v1/groups/{groupname}/runtime/apps"] = runtime_apps.NewCreateRuntimeApp(o.context, o.RuntimeAppsCreateRuntimeAppHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets"] = runtime_app_secrets.NewCreateRuntimeAppSecret(o.context, o.RuntimeAppSecretsCreateRuntimeAppSecretHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/api/v1/groups/{groupname}/runtime/secrets"] = secrets.NewCreateSecret(o.context, o.SecretsCreateSecretHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}/build/apps/{appname}"] = build_app.NewDeleteBuildApp(o.context, o.BuildAppDeleteBuildAppHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}"] = groups.NewDeleteGroup(o.context, o.GroupsDeleteGroupHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}/runtime/pvcs/{pvcname}"] = pvcs.NewDeletePVC(o.context, o.PvcsDeletePVCHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}/runtime/apps/{appname}"] = runtime_apps.NewDeleteRuntimeApp(o.context, o.RuntimeAppsDeleteRuntimeAppHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}"] = runtime_app_secrets.NewDeleteRuntimeAppSecret(o.context, o.RuntimeAppSecretsDeleteRuntimeAppSecretHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/api/v1/groups/{groupname}/runtime/secrets/{secretname}"] = secrets.NewDeleteSecret(o.context, o.SecretsDeleteSecretHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}/exec"] = pods.NewExecPod(o.context, o.PodsExecPodHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/build/apps/{appname}"] = build_apps.NewGetBuildApp(o.context, o.BuildAppsGetBuildAppHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/build/apps"] = build_apps.NewGetBuildApps(o.context, o.BuildAppsGetBuildAppsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/log"] = builds.NewGetBuildLog(o.context, o.BuildsGetBuildLogHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/build/apps/{appname}/builds/{buildid}/publishments"] = builds.NewGetBuildPublishments(o.context, o.BuildsGetBuildPublishmentsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/build/apps/{appname}/builds"] = builds.NewGetBuilds(o.context, o.BuildsGetBuildsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/cluster/componentsstatus"] = components_status.NewGetClusterComponentsStatus(o.context, o.ComponentsStatusGetClusterComponentsStatusHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/cluster/resourceusage"] = cluster_resource_usage.NewGetClusterResource(o.context, o.ClusterResourceUsageGetClusterResourceHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap"] = config_map.NewGetConfigMap(o.context, o.ConfigMapGetConfigMapHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/configmap/history"] = workload.NewGetConfigMapHistory(o.context, o.WorkloadGetConfigMapHistoryHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}"] = groups.NewGetGroup(o.context, o.GroupsGetGroupHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups"] = groups.NewGetGroups(o.context, o.GroupsGetGroupsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/ingress"] = ingress.NewGetIngress(o.context, o.IngressGetIngressHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/pvcs/{pvcname}"] = pvcs.NewGetPVC(o.context, o.PvcsGetPVCHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/pvcs"] = pvcs.NewGetPVCs(o.context, o.PvcsGetPVCsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/pods/{podname}"] = pods.NewGetPod(o.context, o.PodsGetPodHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/pods"] = pods.NewGetPods(o.context, o.PodsGetPodsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}"] = runtime_apps.NewGetRuntimeApp(o.context, o.RuntimeAppsGetRuntimeAppHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}"] = runtime_app_secrets.NewGetRuntimeAppSecret(o.context, o.RuntimeAppSecretsGetRuntimeAppSecretHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}/history"] = runtime_app_secret.NewGetRuntimeAppSecretHistory(o.context, o.RuntimeAppSecretGetRuntimeAppSecretHistoryHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets"] = runtime_app_secrets.NewGetRuntimeAppSecrets(o.context, o.RuntimeAppSecretsGetRuntimeAppSecretsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps"] = runtime_apps.NewGetRuntimeApps(o.context, o.RuntimeAppsGetRuntimeAppsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/secrets/{secretname}"] = secrets.NewGetSecret(o.context, o.SecretsGetSecretHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/secrets"] = secrets.NewGetSecrets(o.context, o.SecretsGetSecretsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/service"] = service.NewGetService(o.context, o.ServiceGetServiceHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/service/history"] = service.NewGetServiceHistory(o.context, o.ServiceGetServiceHistoryHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/workload"] = workload.NewGetWorkload(o.context, o.WorkloadGetWorkloadHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/workload/history"] = workload.NewGetWorkloadHistory(o.context, o.WorkloadGetWorkloadHistoryHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/build/apps/{appname}"] = build_apps.NewUpdateBuildApp(o.context, o.BuildAppsUpdateBuildAppHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}"] = groups.NewUpdateGroup(o.context, o.GroupsUpdateGroupHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/pvcs/{pvcname}"] = pvcs.NewUpdatePVC(o.context, o.PvcsUpdatePVCHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/apps/{appname}"] = runtime_apps.NewUpdateRuntimeApp(o.context, o.RuntimeAppsUpdateRuntimeAppHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/apps/{appname}/secrets/{secretname}"] = runtime_app_secrets.NewUpdateRuntimeAppSecret(o.context, o.RuntimeAppSecretsUpdateRuntimeAppSecretHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/api/v1/groups/{groupname}/runtime/secrets/{secretname}"] = secrets.NewUpdateSecret(o.context, o.SecretsUpdateSecretHandler)
 
 }
 

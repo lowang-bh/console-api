@@ -10,13 +10,11 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
-
-	"github.com/go-openapi/swag"
 )
 
 // DeleteGroupURL generates an URL for the delete group operation
 type DeleteGroupURL struct {
-	Group int64
+	Groupname string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -42,13 +40,13 @@ func (o *DeleteGroupURL) SetBasePath(bp string) {
 func (o *DeleteGroupURL) Build() (*url.URL, error) {
 	var result url.URL
 
-	var _path = "/groups/{group}"
+	var _path = "/api/v1/groups/{groupname}"
 
-	group := swag.FormatInt64(o.Group)
-	if group != "" {
-		_path = strings.Replace(_path, "{group}", group, -1)
+	groupname := o.Groupname
+	if groupname != "" {
+		_path = strings.Replace(_path, "{groupname}", groupname, -1)
 	} else {
-		return nil, errors.New("Group is required on DeleteGroupURL")
+		return nil, errors.New("Groupname is required on DeleteGroupURL")
 	}
 
 	_basePath := o._basePath

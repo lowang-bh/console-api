@@ -56,3 +56,61 @@ func (o *GetGroupOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 		}
 	}
 }
+
+/*GetGroupDefault Failed
+
+swagger:response getGroupDefault
+*/
+type GetGroupDefault struct {
+	_statusCode int
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewGetGroupDefault creates GetGroupDefault with default headers values
+func NewGetGroupDefault(code int) *GetGroupDefault {
+	if code <= 0 {
+		code = 500
+	}
+
+	return &GetGroupDefault{
+		_statusCode: code,
+	}
+}
+
+// WithStatusCode adds the status to the get group default response
+func (o *GetGroupDefault) WithStatusCode(code int) *GetGroupDefault {
+	o._statusCode = code
+	return o
+}
+
+// SetStatusCode sets the status to the get group default response
+func (o *GetGroupDefault) SetStatusCode(code int) {
+	o._statusCode = code
+}
+
+// WithPayload adds the payload to the get group default response
+func (o *GetGroupDefault) WithPayload(payload *models.Error) *GetGroupDefault {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the get group default response
+func (o *GetGroupDefault) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GetGroupDefault) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(o._statusCode)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}

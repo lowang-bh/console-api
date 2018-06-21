@@ -29,7 +29,7 @@ func NewGetGroup(ctx *middleware.Context, handler GetGroupHandler) *GetGroup {
 	return &GetGroup{Context: ctx, Handler: handler}
 }
 
-/*GetGroup swagger:route GET /groups/{group} groups getGroup
+/*GetGroup swagger:route GET /api/v1/groups/{groupname} groups getGroup
 
 GetGroup get group API
 

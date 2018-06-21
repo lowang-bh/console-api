@@ -29,7 +29,7 @@ func NewCreateGroup(ctx *middleware.Context, handler CreateGroupHandler) *Create
 	return &CreateGroup{Context: ctx, Handler: handler}
 }
 
-/*CreateGroup swagger:route POST /groups groups createGroup
+/*CreateGroup swagger:route POST /api/v1/groups groups createGroup
 
 CreateGroup create group API
 

@@ -35,7 +35,7 @@ func (o *GetGroupsURL) SetBasePath(bp string) {
 func (o *GetGroupsURL) Build() (*url.URL, error) {
 	var result url.URL
 
-	var _path = "/groups"
+	var _path = "/api/v1/groups"
 
 	_basePath := o._basePath
 	result.Path = golangswaggerpaths.Join(_basePath, _path)

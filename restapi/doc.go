@@ -12,10 +12,11 @@ The Console API Server for LAIN Cluster
     Version: 0.0.1
 
     Consumes:
-    - application/vnd.laincloud.console.v1+json
+    - application/json
 
     Produces:
-    - application/vnd.laincloud.console.v1+json
+    - application/json
+    - text/plain
 
 swagger:meta
 */

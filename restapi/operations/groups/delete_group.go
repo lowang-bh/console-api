@@ -29,7 +29,7 @@ func NewDeleteGroup(ctx *middleware.Context, handler DeleteGroupHandler) *Delete
 	return &DeleteGroup{Context: ctx, Handler: handler}
 }
 
-/*DeleteGroup swagger:route DELETE /groups/{group} groups deleteGroup
+/*DeleteGroup swagger:route DELETE /api/v1/groups/{groupname} groups deleteGroup
 
 DeleteGroup delete group API
 
