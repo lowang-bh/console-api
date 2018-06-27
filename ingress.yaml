@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: kube-system
+  name: console-api
+  labels:
+    app: console-api
+spec:
+  rules:
+    - host: console-api.laincloud.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: console-api
+              servicePort: 8080
+          - path: /docs
+            backend:
+              serviceName: console-api
+              servicePort: 8081

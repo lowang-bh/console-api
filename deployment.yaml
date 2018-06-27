@@ -1,0 +1,28 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: kube-system
+  name: console-api
+  labels:
+    app: console-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: console-api
+  template:
+    metadata:
+      labels:
+        app: console-api
+    spec:
+      containers:
+        - name: main
+          image: lain/console-api:0.0.10
+          command: ["/lain/app/console-server", "--host=0.0.0.0", "--port=8080"]
+          ports:
+            - containerPort: 8080
+        - name: docs
+          image: lain/console-api:0.0.10
+          command: ["/lain/app/swagger", "serve", "/lain/app/swagger.json", "--host=0.0.0.0", "--port=8081", "--no-open"]
+          ports:
+            - containerPort: 8081
