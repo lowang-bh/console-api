@@ -20,9 +20,13 @@
                 "tags": [
                     "ping"
                 ],
+                "operationId": "ping",
                 "responses": {
                     "200": {
-                        "description": "Check whether the server is healthy"
+                        "description": "Check whether the server is healthy",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "default": {
                         "description": "Failed",
@@ -282,7 +286,7 @@
             },
             "delete": {
                 "tags": [
-                    "buildApp"
+                    "buildApps"
                 ],
                 "operationId": "deleteBuildApp",
                 "responses": {
@@ -316,7 +320,7 @@
             ],
             "get": {
                 "tags": [
-                    "builds"
+                    "buildApp"
                 ],
                 "operationId": "getBuilds",
                 "responses": {
@@ -363,7 +367,7 @@
             ],
             "get": {
                 "tags": [
-                    "builds"
+                    "buildApp"
                 ],
                 "operationId": "getBuildLog",
                 "produces": [
@@ -401,7 +405,7 @@
             ],
             "get": {
                 "tags": [
-                    "builds"
+                    "buildApp"
                 ],
                 "operationId": "getBuildPublishments",
                 "responses": {
@@ -581,9 +585,9 @@
             ],
             "get": {
                 "tags": [
-                    "workload"
+                    "runtimeApp"
                 ],
-                "operationId": "getWorkload",
+                "operationId": "getRuntimeAppWorkload",
                 "responses": {
                     "200": {
                         "description": "Get the workload of the runtime app",
@@ -601,9 +605,9 @@
             },
             "put": {
                 "tags": [
-                    "workload"
+                    "runtimeApp"
                 ],
-                "operationId": "createOrUpdateWorkload",
+                "operationId": "createOrUpdateRuntimeAppWorkload",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -645,9 +649,9 @@
             ],
             "get": {
                 "tags": [
-                    "workload"
+                    "runtimeApp"
                 ],
-                "operationId": "getWorkloadHistory",
+                "operationId": "getRuntimeAppWorkloadHistory",
                 "responses": {
                     "200": {
                         "description": "Get the workload history of the runtime app",
@@ -685,9 +689,9 @@
             ],
             "get": {
                 "tags": [
-                    "configMap"
+                    "runtimeApp"
                 ],
-                "operationId": "getConfigMap",
+                "operationId": "getRuntimeAppConfigMap",
                 "responses": {
                     "200": {
                         "description": "Get the config map of the runtime app",
@@ -705,9 +709,9 @@
             },
             "put": {
                 "tags": [
-                    "configMap"
+                    "runtimeApp"
                 ],
-                "operationId": "createOrUpdateConfigMap",
+                "operationId": "createOrUpdateRuntimeAppConfigMap",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -749,9 +753,9 @@
             ],
             "get": {
                 "tags": [
-                    "workload"
+                    "runtimeApp"
                 ],
-                "operationId": "getConfigMapHistory",
+                "operationId": "getRuntimeAppConfigMapHistory",
                 "responses": {
                     "200": {
                         "description": "Get the config map history of the runtime app",
@@ -789,7 +793,7 @@
             ],
             "get": {
                 "tags": [
-                    "runtimeAppSecrets"
+                    "runtimeApp"
                 ],
                 "operationId": "getRuntimeAppSecrets",
                 "responses": {
@@ -812,7 +816,7 @@
             },
             "post": {
                 "tags": [
-                    "runtimeAppSecrets"
+                    "runtimeApp"
                 ],
                 "operationId": "createRuntimeAppSecret",
                 "parameters": [{
@@ -869,7 +873,7 @@
             ],
             "get": {
                 "tags": [
-                    "runtimeAppSecrets"
+                    "runtimeApp"
                 ],
                 "operationId": "getRuntimeAppSecret",
                 "responses": {
@@ -889,7 +893,7 @@
             },
             "put": {
                 "tags": [
-                    "runtimeAppSecrets"
+                    "runtimeApp"
                 ],
                 "operationId": "updateRuntimeAppSecret",
                 "parameters": [{
@@ -916,7 +920,7 @@
             },
             "delete": {
                 "tags": [
-                    "runtimeAppSecrets"
+                    "runtimeApp"
                 ],
                 "operationId": "deleteRuntimeAppSecret",
                 "responses": {
@@ -957,7 +961,7 @@
             ],
             "get": {
                 "tags": [
-                    "runtimeAppSecret"
+                    "runtimeApp"
                 ],
                 "operationId": "getRuntimeAppSecretHistory",
                 "responses": {
@@ -997,9 +1001,9 @@
             ],
             "get": {
                 "tags": [
-                    "service"
+                    "runtimeApp"
                 ],
-                "operationId": "getService",
+                "operationId": "getRuntimeAppService",
                 "responses": {
                     "200": {
                         "description": "Get the service of the runtime app",
@@ -1020,9 +1024,9 @@
             },
             "put": {
                 "tags": [
-                    "service"
+                    "runtimeApp"
                 ],
-                "operationId": "createOrUpdateService",
+                "operationId": "createOrUpdateRuntimeAppService",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1070,9 +1074,9 @@
             ],
             "get": {
                 "tags": [
-                    "service"
+                    "runtimeApp"
                 ],
-                "operationId": "getServiceHistory",
+                "operationId": "getRuntimeAppServiceHistory",
                 "responses": {
                     "200": {
                         "description": "Get the service history of the runtime app",
@@ -1110,9 +1114,9 @@
             ],
             "get": {
                 "tags": [
-                    "pods"
+                    "runtimeApp"
                 ],
-                "operationId": "getPods",
+                "operationId": "getRuntimeAppPods",
                 "responses": {
                     "200": {
                         "description": "Get the pods of the runtime app",
@@ -1157,9 +1161,9 @@
             ],
             "get": {
                 "tags": [
-                    "pods"
+                    "runtimeApp"
                 ],
-                "operationId": "getPod",
+                "operationId": "getRuntimeAppPod",
                 "responses": {
                     "200": {
                         "description": "Get the pod of the runtime app",
@@ -1201,9 +1205,9 @@
             ],
             "get": {
                 "tags": [
-                    "pods"
+                    "runtimeApp"
                 ],
-                "operationId": "attatchPod",
+                "operationId": "logsRuntimeAppPod",
                 "description": "长连接",
                 "responses": {
                     "200": {
@@ -1243,9 +1247,9 @@
             ],
             "get": {
                 "tags": [
-                    "pods"
+                    "runtimeApp"
                 ],
-                "operationId": "execPod",
+                "operationId": "execRuntimeAppPod",
                 "description": "长连接",
                 "responses": {
                     "200": {
@@ -1270,9 +1274,9 @@
             }],
             "put": {
                 "tags": [
-                    "ingress"
+                    "groupRuntime"
                 ],
-                "operationId": "createOrUpdateIngress",
+                "operationId": "createOrUpdateGroupIngress",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1297,9 +1301,9 @@
             },
             "get": {
                 "tags": [
-                    "ingress"
+                    "groupRuntime"
                 ],
-                "operationId": "getIngress",
+                "operationId": "getGroupIngress",
                 "responses": {
                     "200": {
                         "description": "Get the ingress",
@@ -1326,9 +1330,9 @@
             }],
             "post": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "createPVC",
+                "operationId": "createGroupPVC",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1353,9 +1357,9 @@
             },
             "get": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "getPVCs",
+                "operationId": "getGroupPVCs",
                 "responses": {
                     "200": {
                         "description": "List the PVCs",
@@ -1393,9 +1397,9 @@
             ],
             "get": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "getPVC",
+                "operationId": "getGroupPVC",
                 "responses": {
                     "200": {
                         "description": "Get the PVC",
@@ -1466,9 +1470,9 @@
             }],
             "post": {
                 "tags": [
-                    "secrets"
+                    "groupRuntime"
                 ],
-                "operationId": "createSecret",
+                "operationId": "createGroupSecret",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1493,9 +1497,9 @@
             },
             "get": {
                 "tags": [
-                    "secrets"
+                    "groupRuntime"
                 ],
-                "operationId": "getSecrets",
+                "operationId": "getGroupSecrets",
                 "responses": {
                     "200": {
                         "description": "List the secrets",
@@ -1533,12 +1537,12 @@
             ],
             "get": {
                 "tags": [
-                    "secrets"
+                    "groupRuntime"
                 ],
-                "operationId": "getSecret",
+                "operationId": "getGroupSecret",
                 "responses": {
                     "200": {
-                        "description": "Get the secret",
+                        "description": "Get the secret of the group",
                         "schema": {
                             "$ref": "#/definitions/secret"
                         }
@@ -1553,9 +1557,9 @@
             },
             "put": {
                 "tags": [
-                    "secrets"
+                    "groupRuntime"
                 ],
-                "operationId": "updateSecret",
+                "operationId": "updateGroupSecret",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1580,9 +1584,9 @@
             },
             "delete": {
                 "tags": [
-                    "secrets"
+                    "groupRuntime"
                 ],
-                "operationId": "deleteSecret",
+                "operationId": "deleteGroupSecret",
                 "responses": {
                     "204": {
                         "description": "Deleted"
@@ -1614,12 +1618,12 @@
             ],
             "get": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "getPVC",
+                "operationId": "getGroupPVC",
                 "responses": {
                     "200": {
-                        "description": "Get the PVC",
+                        "description": "Get the PVC of the group",
                         "schema": {
                             "$ref": "#/definitions/pvc"
                         }
@@ -1634,9 +1638,9 @@
             },
             "put": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "updatePVC",
+                "operationId": "updateGroupPVC",
                 "parameters": [{
                     "name": "body",
                     "in": "body",
@@ -1661,9 +1665,9 @@
             },
             "delete": {
                 "tags": [
-                    "pvcs"
+                    "groupRuntime"
                 ],
-                "operationId": "deletePVC",
+                "operationId": "deleteGroupPVC",
                 "responses": {
                     "204": {
                         "description": "Deleted"
@@ -1679,8 +1683,8 @@
         },
         "/api/v1/cluster/resourceusage": {
             "get": {
-                "tags": ["clusterResourceUsage"],
-                "operationId": "getClusterResource",
+                "tags": ["cluster"],
+                "operationId": "getClusterResourceUsage",
                 "responses": {
                     "200": {
                         "description": "Get the cluster resouce usage",
@@ -1699,7 +1703,7 @@
         },
         "/api/v1/cluster/componentsstatus": {
             "get": {
-                "tags": ["componentsStatus"],
+                "tags": ["cluster"],
                 "operationId": "getClusterComponentsStatus",
                 "responses": {
                     "200": {
